@@ -16,11 +16,11 @@
             var that = this;
             var checkBoxes = [];
             var filterByTagsDropdown, showAgeAfter,
-                kanbanField, reportKanbanField,
-                columns, scheduleStatesMap,
-                hideLastColumnIfReleased, showTaskCompletion, showDefectStatus,
-                lastState, artifactTypes,
-                colorByArtifactType, policyCheckBox;
+                    kanbanField, reportKanbanField,
+                    columns, scheduleStatesMap,
+                    hideLastColumnIfReleased, showTaskCompletion, showDefectStatus,
+                    lastState, artifactTypes,
+                    colorByArtifactType, policyCheckBox;
         
             that._showThroughputReport = function() {
                 var config = {reportNumber: 180, reportName: "Throughput Report",
@@ -167,11 +167,11 @@
                     { label: "", value: ""}
                 ];
                 rallyDataSource.findAll(
-                    {key    : 'tags',
-                        order:   'Name',
-                        type   : 'Tags',
-                        fetch  : 'Name,ObjectID',
-                        query  : '(Archived = False)' }, populateFilterByDropdown);
+                        {key    : 'tags',
+                            order:   'Name',
+                            type   : 'Tags',
+                            fetch  : 'Name,ObjectID',
+                            query  : '(Archived = False)' }, populateFilterByDropdown);
         
                 var showSpan = document.createElement("span");
                 showSpan.appendChild(document.createTextNode("Show:"));
@@ -351,63 +351,9 @@
         
                     cardboard = new rally.sdk.ui.CardBoard(cardboardConfig, rallyDataSource);
         
-        
-                    cardboard.addUpdateItem = function(item) {
-                        //update the card in its column
-                        rally.forEach(cardboard.getColumns(), function(column) {
-                            var oldNode = column.getDndSource().getNode(item.ObjectID);
-                            if (oldNode) {
-                                if (column.getDndSource().getItem(oldNode.id)[cardboardConfig.attribute] === item[cardboardConfig.attribute]) {
-                                    column.getDndSource().refreshItem(item);
-                                }
-                                else {
-                                    column.getDndSource().removeItem(item);
-                                    cardboard.addItem(item);
-                                }
-                            }
-                        });
-                    };
-                    cardboard.addItem = function(item) {
-                        //update the card in its column
-                        rally.forEach(cardboard.getColumns(), function(column) {
-                            if (column.getColumnValue() === item[cardboardConfig.attribute].toString()) {
-                                column.getDndSource().addItem(item, 1000);
-                            }
-                        });
-                    };
-        
-                    cardboard.addEventListener("onLoad", function() {
-                        var lastRun = new Date();
-                        var strDate = dojo.date.stamp.toISOString(lastRun);
-                        strDate = strDate.substring(0, strDate.length - 6);
-                        var interval = 1000 * 10;
-                        setInterval(function() {
-                            function updateCards(results) {
-                                console.log("queried results", results);
-                                dojo.forEach(results.stories, function(story) {
-                                    cardboard.addUpdateItem(story);
-                                });
-                            }
-        
-                            rallyDataSource.find({
-                                key:"stories",
-                                type:"HierarchicalRequirement",
-                                query:"(LastUpdateDate > " + strDate + ")",
-                                fetch:true
-                            }, updateCards);
-                            lastRun = dojo.date.add(new Date(), "second", -90);
-                            strDate = dojo.date.stamp.toISOString(lastRun);
-                            strDate = strDate.substring(0, strDate.length - 6);
-        
-        
-                        }, interval);
-        
-                    });
-        
                     cardboard.addEventListener("preUpdate", that._onBeforeItemUpdated);
                     cardboard.display("kanbanBoard");
                 }
-        
                 that._getAndStorePrefData(displayBoard);
             };
         
