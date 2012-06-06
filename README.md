@@ -1,2 +1,3 @@
-Kanban
-======
+The Kanban Board app provides teams with the option of managing pull-based, lean software development projects with other iterative and time-boxed projects. The Kanban Board allows the user to trigger an update to the Schedule State field for any drag-and-drop action from one column to another column. Using the Schedule State field enables a shared view of work in Rally regardless of the methodology that each team practices because many pages in Rally such as Release Status show status and roll-ups based on the Schedule State field.
+
+Product backlog, time-boxed iterations, and estimation are unnecessary when using a Kanban system since work is pulled into the board and the queue is the only work of interest. Achieving maximum throughput is the main goal by determining bottlenecks in the system and limiting the work in progress to reduce task context switching and ensure work is completed efficiently and quickly.
