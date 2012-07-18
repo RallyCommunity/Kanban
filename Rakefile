@@ -1,11 +1,17 @@
 require 'fileutils'
+DEPLOY_DIR = "deploy"
 
 def find_rakefile_dir
   __FILE__.to_s.split(/Rakefile/i)[0]
 end
 
 def make_output_filename(name)
-  name.sub(/\.template\.html$/, 'App.html')
+  DEPLOY_DIR+"/"+name.sub(/\.template\.html$/, 'App.html')
+end
+
+
+def assure_deploy_directory_exists
+  mkdir DEPLOY_DIR unless  File.exists?(DEPLOY_DIR)
 end
 
 def write_out_file(filename, new_html, concatenated_css, concatenated_js)
@@ -83,14 +89,6 @@ task :combine do |t, args|
     output_filename = make_output_filename(mashup_file)
     write_out_file(output_filename, new_html, concatenated_css, concatenated_js)
 
-    #Copy to catalog deployment dir
-    target_dir = "#{ENV['HOME']}/projects/alm/alm-webapp/src/main/webapp/appdefinition"
-    puts "\tCopying #{output_filename} to #{target_dir}/#{output_filename}..."
-    puts
-    puts
-    FileUtils.mkdir_p "#{target_dir}"
-    FileUtils.cp output_filename, target_dir
-
   end
 end
 
@@ -121,6 +119,7 @@ end
 
 desc "Combine and run jslint"
 task :deploy do |t, args|
+  assure_deploy_directory_exists
   Rake::Task[:jslint].invoke()
   Rake::Task[:combine].invoke()
 end
